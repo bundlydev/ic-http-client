@@ -1,17 +1,17 @@
 {
   "name": "@bundly/ic-http-client",
-  "version": "0.1.0",
-  "description": "Client library for interacting with the Internet Computer",
+  "version": "0.1.1",
+  "description": "HTTP client to call ICP API Rest",
   "author": "Bundly",
   "license": "MIT",
   "private": false,
-  "homepage": "https://github.com/bundlydev/ic-core-js#readme",
+  "homepage": "https://github.com/bundlydev/ic-http-client#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bundlydev/ic-core-js.git"
+    "url": "git+https://github.com/bundlydev/ic-http-client.git"
   },
   "bugs": {
-    "url": "https://github.com/bundlydev/ic-core-js/issues"
+    "url": "https://github.com/bundlydev/ic-http-client/issues"
   },
   "keywords": [
     "dfinity",
