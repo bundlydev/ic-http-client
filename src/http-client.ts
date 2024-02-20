@@ -17,7 +17,7 @@ export class HttpClient {
             certificate_version: []
         });
 
-        if (result.status_code > 400) {
+        if (result.status_code >= 400) {
             const error = {
                 statusCode: result.status_code,
             }
@@ -51,7 +51,7 @@ export class HttpClient {
             certificate_version: []
         });
 
-        if (result.status_code > 400) {
+        if (result.status_code >= 400) {
             const error = {
                 statusCode: result.status_code,
             }

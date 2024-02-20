@@ -1,6 +1,6 @@
 {
   "name": "@bundly/ic-http-client",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "HTTP client to call ICP API Rest",
   "author": "Bundly",
   "license": "MIT",

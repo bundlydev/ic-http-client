@@ -35,7 +35,6 @@ export function parseBodyRequest(data: string | number[] | Record<string, unknow
         // Convert array to JSON string and then to Uint8Array
         try {
             const jsonData = JSON.stringify(data);
-            console.log(encoder.encode(jsonData));
             return encoder.encode(jsonData);
         } catch (error) {
             throw error;
