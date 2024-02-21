@@ -21,7 +21,8 @@ export class HttpClient {
 
         this.agent = new HttpAgent({
             host: hostUrl,
-            identity: this.options?.identity
+            identity: this.options?.identity,
+            ...(this.options?.agentOptions || {})
         });
 
         // TODO: do this only for develoment environment
@@ -100,7 +101,7 @@ export class HttpClient {
 
         if (result.status_code >= 400) {
             const error = {
-                statusCode: result.status_code,
+                statusCode: result.status_code
             }
 
             throw error;
