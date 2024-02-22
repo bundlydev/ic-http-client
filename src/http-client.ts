@@ -1,11 +1,59 @@
-import { ActorSubclass } from "@dfinity/agent";
+import { Actor, ActorConfig, ActorSubclass, HttpAgent, HttpAgentOptions, Identity } from "@dfinity/agent";
 
-import { parseBodyRequest, parseHeadersRequest } from './request-parsers';
-import { parseBodyResponse, parseHeadersResponse } from './response-parsers';
-import { REST_ACTOR_SERVICE, QueryConfig, UpdateConfig, HttpResponse, GetConfig, PostConfig, PutConfig, DeleteData } from "./http-client.types";
+import { idlFactory } from "api-rest.did";
+import { QueryConfig, UpdateConfig, HttpResponse, GetConfig, PostConfig, PutConfig, DeleteData, REST_ACTOR_SERVICE } from "./http-client.types";
+import { parseBodyRequest, parseHeadersRequest } from "./request-parsers";
+import { parseBodyResponse, parseHeadersResponse } from "./response-parsers";
+
+export type HttpClientConfig = {
+    identity?: Identity;
+    agentOptions?: Omit<HttpAgentOptions, "host" | "identity">;
+    actorOptions?: Omit<ActorConfig, "canisterId">;
+};
 
 export class HttpClient {
-    constructor(private actor: ActorSubclass<REST_ACTOR_SERVICE>) { }
+    private agent: HttpAgent;
+    private actor: ActorSubclass<REST_ACTOR_SERVICE>;
+
+    constructor(private readonly baseUrl: string, private readonly options?: HttpClientConfig) {
+        const hostUrl = this.getHostUrl(this.baseUrl);
+        const canisterId = this.extractId(this.baseUrl);
+
+        this.agent = new HttpAgent({
+            host: hostUrl,
+            identity: this.options?.identity,
+            ...(this.options?.agentOptions || {})
+        });
+
+        // TODO: do this only for develoment environment
+        this.agent.fetchRootKey();
+
+        this.actor = Actor.createActor(idlFactory, {
+            agent: this.agent,
+            canisterId,
+            ...(options?.actorOptions ?? {})
+        });
+    }
+
+    private extractId(url: string): string {
+        var pattern = /(?:https?:\/\/)([^\/.]+)\./;
+        var match = url.match(pattern);
+        if (match) {
+            return match[1];
+        } else {
+            throw new Error("Invalid URL");
+        }
+    }
+
+    private getHostUrl(url: string): string {
+        const textToReplace = `${this.extractId(url)}.`;
+        const hostUrl = new URL(url.replace(textToReplace, "")).href;
+        return hostUrl;
+    }
+
+    public replaceIdentity(identity: Identity) {
+        this.agent.replaceIdentity(identity);
+    }
 
     public async query(url: string, config?: QueryConfig): Promise<HttpResponse> {
         const queryParams = config?.params ? `?${new URLSearchParams(config.params).toString()}` : "";
@@ -53,7 +101,7 @@ export class HttpClient {
 
         if (result.status_code >= 400) {
             const error = {
-                statusCode: result.status_code,
+                statusCode: result.status_code
             }
 
             throw error;

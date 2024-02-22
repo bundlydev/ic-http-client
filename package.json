@@ -1,6 +1,6 @@
 {
   "name": "@bundly/ic-http-client",
-  "version": "0.1.2",
+  "version": "0.2.0-rc.1",
   "description": "HTTP client to call ICP API Rest",
   "author": "Bundly",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@dfinity/agent": "^1.0.0",
-    "@dfinity/principal": "^1.0.0"
+    "@dfinity/agent": "^1.0.1",
+    "@dfinity/principal": "^1.0.1"
   }
 }
